@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mysterium Style VPN</title>
+  <style>
+    body { font-family: Arial; background: #0f1624; color: white; text-align: center; margin: 0; padding: 20px; }
+    h1 { color: #00bfff; }
+    .servers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+    .server {
+      background: #1c2433;
+      padding: 15px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .server:hover {
+      background: #27344a;
+    }
+    button {
+      background: #0078ff;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌐 Select VPN Server</h1>
+  <div class="servers">
+    <div class="server">🇺🇸 USA</div>
+    <div class="server">🇩🇪 Germany</div>
+    <div class="server">🇯🇵 Japan</div>
+    <div class="server">🇫🇷 France</div>
+    <div class="server">🇬🇧 UK</div>
+    <div class="server">🇨🇦 Canada</div>
+    <div class="server">🇸🇪 Sweden</div>
+  </div>
+  <button>Connect</button>
+</body>
+</html>
