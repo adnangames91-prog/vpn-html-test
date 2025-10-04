@@ -1,353 +1,138 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>VPN — Mysterium-like UI (Demo)</title>
-<link rel="preconnect" href="https://flagcdn.com">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VPN</title>
 <style>
-  :root{
-    --bg:#071226; --card:#0e2233; --muted:#9fb0c2; --accent:#06b6d4;
-    --glass: rgba(255,255,255,0.04);
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; font-family: "Noto Sans Arabic", system-ui, Roboto, "Segoe UI", sans-serif;
-    background: linear-gradient(180deg,#041026 0%, #071226 100%); color:#e9f2f7;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:1100px;margin:18px auto;padding:18px}
-  header{display:flex;gap:16px;align-items:center;justify-content:space-between}
-  .brand{display:flex;gap:12px;align-items:center}
-  .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,#05b8d8,#0ea5a3);display:flex;align-items:center;justify-content:center;font-weight:700;color:#022}
-  h1{margin:0;font-size:20px}
-  .top-controls{display:flex;gap:12px;align-items:center}
-  .pill{background:var(--glass);padding:8px 12px;border-radius:999px;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
-  .status-dot{width:10px;height:10px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px rgba(239,68,68,0.6)}
-  .status-dot.connected{background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,0.45)}
-  main{margin-top:18px;display:grid;grid-template-columns:1fr 360px;gap:18px}
-  /* left: list */
-  .server-list{display:grid;gap:12px}
-  .server-card{
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;
-    box-shadow:0 8px 20px rgba(2,6,23,0.6);transition:transform .18s ease;
-  }
-  .server-card:hover{transform:translateY(-6px)}
-  .left-info{display:flex;gap:12px;align-items:center}
-  .flag{width:56px;height:36px;border-radius:6px;object-fit:cover;border:1px solid rgba(255,255,255,0.03)}
-  .meta{min-width:160px}
-  .meta .name{font-weight:700}
-  .meta .country{color:var(--muted);font-size:13px;margin-top:4px}
-  .right-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-  .latency{font-size:13px;color:var(--muted)}
-  .btn{appearance:none;border:0;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700}
-  .connect{background:var(--accent);color:#022}
-  .disconnect{background:#ef4444;color:#fff}
-  .small{font-size:13px;color:var(--muted)}
-  /* right: details */
-  .panel{background:linear-gradient(180deg,#071d2c,#03202a);border-radius:12px;padding:14px;box-shadow:0 10px 30px rgba(1,6,12,0.6)}
-  .panel h3{margin:0 0 8px 0}
-  .ip-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .ip{font-weight:700}
-  .kpi{display:flex;gap:12px;margin-top:12px}
-  .kpi .item{background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;min-width:90px;text-align:center}
-  .footer-note{color:var(--muted);font-size:13px;margin-top:12px}
-  /* responsive */
-  @media (max-width:980px){
-    main{grid-template-columns:1fr; padding-bottom:40px}
-    .right-actions{flex-direction:row;align-items:center}
-  }
-  /* spinner */
-  .spinner{width:18px;height:18px;border-radius:50%;border:3px solid rgba(255,255,255,0.12);border-top-color:var(--accent);animation:spin .9s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  /* search */
-  .search-row{display:flex;gap:8px;align-items:center;margin-top:12px}
-  .search{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
-  .filters{display:flex;gap:8px}
-  .tag{background:rgba(255,255,255,0.02);padding:8px 10px;border-radius:8px;font-size:13px;color:var(--muted)}
+:root {
+  --bg:#071226;
+  --card:#0e2233;
+  --muted:#9fb0c2;
+  --accent:#06b6d4;
+  --glass:rgba(255,255,255,0.04);
+}
+body {
+  margin:0;
+  font-family:"Noto Sans Arabic",sans-serif;
+  background:linear-gradient(180deg,#041026 0%,#071226 100%);
+  color:#e9f2f7;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap {
+  max-width:1100px;
+  margin:18px auto;
+  padding:18px;
+}
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+}
+.brand {
+  font-size:22px;
+  font-weight:700;
+  color:var(--accent);
+}
+.server-list {
+  display:grid;
+  gap:12px;
+}
+.server-card {
+  background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+  border-radius:12px;
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:transform .15s;
+}
+.server-card:hover {
+  transform:translateY(-3px);
+}
+.server-left {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.flag {
+  width:48px;
+  height:36px;
+  border-radius:6px;
+  object-fit:cover;
+  border:1px solid rgba(255,255,255,0.05);
+}
+.server-info {
+  display:flex;
+  flex-direction:column;
+}
+.server-info .city {
+  color:var(--muted);
+  font-size:13px;
+}
+.btn-connect {
+  background:var(--accent);
+  color:#000;
+  border:none;
+  border-radius:8px;
+  padding:8px 18px;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-disconnect {
+  background:#f44;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  padding:8px 18px;
+  font-weight:600;
+  cursor:pointer;
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <div class="brand">
-      <div class="logo">VPN</div>
-      <div>
-        <h1>VPN — شبيه Mysterium (نسخة تجريبية)</h1>
-        <div class="small">واجهة تجريبية — لربطها بخادم حقيقي لاحقاً</div>
-      </div>
-    </div>
-
-    <div class="top-controls">
-      <div class="pill">
-        <div id="connDot" class="status-dot" title="الحالة"></div>
-        <div id="connText" class="small">غير متصل</div>
-      </div>
-      <div class="pill">
-        <div class="small">IP الحالي</div>
-        <div id="currentIP" style="font-weight:700">—</div>
-      </div>
-    </div>
+    <div class="brand">VPN</div>
   </header>
 
   <main>
-    <section>
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div style="font-weight:800">السيرفرات المتاحة</div>
-        <div class="small">اِختر سيرفر واضغط اتصال</div>
-      </div>
-
-      <div class="search-row">
-        <input id="searchInput" class="search" placeholder="ابحث عن بلد أو مدينة..." />
-        <div class="filters">
-          <div class="tag" onclick="filterRegion('all')">الكل</div>
-          <div class="tag" onclick="filterRegion('eu')">أوروبا</div>
-          <div class="tag" onclick="filterRegion('na')">أمريكا</div>
-          <div class="tag" onclick="filterRegion('asia')">آسيا</div>
-        </div>
-      </div>
-
-      <div id="list" class="server-list" style="margin-top:12px">
-        <!-- كسرد السيرفرات يتم إنشاؤه بواسطة JS -->
-      </div>
-    </section>
-
-    <aside>
-      <div class="panel">
-        <h3>تفاصيل الاتصال</h3>
-        <div class="ip-row" style="margin-top:6px">
-          <div>
-            <div class="small">الحالة</div>
-            <div id="sideStatus" class="ip">غير متصل</div>
-          </div>
-          <div style="text-align:right">
-            <div class="small">الخادم المحدد</div>
-            <div id="sideServer" class="ip">—</div>
+    <div class="server-list">
+      <div class="server-card">
+        <div class="server-left">
+          <img src="https://flagcdn.com/w40/us.png" class="flag" alt="">
+          <div class="server-info">
+            <div>USA — New York</div>
+            <div class="city">us1.example:51820</div>
           </div>
         </div>
-
-        <div class="kpi">
-          <div class="item">
-            <div class="small">Ping</div>
-            <div id="sidePing">— ms</div>
-          </div>
-          <div class="item">
-            <div class="small">سرعة (تقريبي)</div>
-            <div id="sideSpeed">— Mbps</div>
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <button id="quickConnect" class="btn connect" style="width:100%">اتصال سريع</button>
-        </div>
-
-        <div class="footer-note">
-          هذه نسخة تجريبية — الإتصال فعلياً يتطلّب باكند وملفات إعداد WireGuard. يمكنك تحويل زر الاتصال ليطلب API لاحقاً.
-        </div>
+        <button class="btn-connect">اتصال</button>
       </div>
-    </aside>
+
+      <div class="server-card">
+        <div class="server-left">
+          <img src="https://flagcdn.com/w40/de.png" class="flag" alt="">
+          <div class="server-info">
+            <div>Germany — Berlin</div>
+            <div class="city">de1.example:51820</div>
+          </div>
+        </div>
+        <button class="btn-connect">اتصال</button>
+      </div>
+
+      <div class="server-card">
+        <div class="server-left">
+          <img src="https://flagcdn.com/w40/jp.png" class="flag" alt="">
+          <div class="server-info">
+            <div>Japan — Tokyo</div>
+            <div class="city">jp1.example:51820</div>
+          </div>
+        </div>
+        <button class="btn-connect">اتصال</button>
+      </div>
+    </div>
   </main>
 </div>
-
-<script>
-/*
-- واجهة front-end فقط (بدون باكند)
-- تُحاكي اتصال WireGuard/ VPN: عند الضغط Connect تظهر عملية اتصال مزيفة، ثم تغير الحالة.
-- يمكن تعديل مصفوفة servers لإضافة/حذف سيرفرات فعلية لاحقاً.
-*/
-
-const servers = [
-  { id:'us-ny-1', name:'USA — New York', country:'US', city:'New York', region:'na', endpoint:'us1.example:51820', flag:'us' },
-  { id:'us-la-1', name:'USA — Los Angeles', country:'US', city:'Los Angeles', region:'na', endpoint:'us2.example:51820', flag:'us' },
-  { id:'de-ber-1', name:'Germany — Berlin', country:'DE', city:'Berlin', region:'eu', endpoint:'de1.example:51820', flag:'de' },
-  { id:'nl-am-1', name:'Netherlands — Amsterdam', country:'NL', city:'Amsterdam', region:'eu', endpoint:'nl1.example:51820', flag:'nl' },
-  { id:'jp-tok-1', name:'Japan — Tokyo', country:'JP', city:'Tokyo', region:'asia', endpoint:'jp1.example:51820', flag:'jp' },
-  { id:'sg-sg-1', name:'Singapore', country:'SG', city:'Singapore', region:'asia', endpoint:'sg1.example:51820', flag:'sg' }
-];
-
-let selected = null;
-let connectedServer = null;
-const listEl = document.getElementById('list');
-const connDot = document.getElementById('connDot');
-const connText = document.getElementById('connText');
-const currentIP = document.getElementById('currentIP');
-const sideStatus = document.getElementById('sideStatus');
-const sideServer = document.getElementById('sideServer');
-const sidePing = document.getElementById('sidePing');
-const sideSpeed = document.getElementById('sideSpeed');
-const quickConnect = document.getElementById('quickConnect');
-
-function humanNumber(n){ return Math.round(n); }
-
-function renderServers(filterText='', region='all'){
-  listEl.innerHTML='';
-  const q = filterText.trim().toLowerCase();
-  const filtered = servers.filter(s=>{
-    if(region!=='all' && s.region!==region) return false;
-    if(!q) return true;
-    return (s.name + ' ' + s.city + ' ' + s.country).toLowerCase().includes(q);
-  });
-  filtered.forEach(s=>{
-    const card = document.createElement('div'); card.className='server-card';
-    card.innerHTML = `
-      <div class="left-info">
-        <img class="flag" src="https://flagcdn.com/w80/${s.flag}.png" alt="${s.country}">
-        <div class="meta">
-          <div class="name">${s.name}</div>
-          <div class="country">${s.city} • ${s.endpoint}</div>
-        </div>
-      </div>
-      <div class="right-actions">
-        <div class="latency small" id="lat-${s.id}">Ping: -- ms</div>
-        <div style="display:flex;gap:8px">
-          <button class="btn connect" data-id="${s.id}">اتصال</button>
-          <button class="btn disconnect" data-id="${s.id}">قطع</button>
-        </div>
-      </div>
-    `;
-    listEl.appendChild(card);
-  });
-
-  // attach events
-  document.querySelectorAll('.server-card .connect').forEach(b=>{
-    b.onclick = ()=> startConnect(b.dataset.id);
-  });
-  document.querySelectorAll('.server-card .disconnect').forEach(b=>{
-    b.onclick = ()=> disconnect(b.dataset.id);
-  });
-
-  // initial ping fill
-  filtered.forEach(s=>{
-    simulatePing(s.id);
-  });
-}
-
-function simulatePing(id){
-  // يُحاكي Ping عشوائي ويضعه في العنصر
-  const el = document.getElementById('lat-'+id);
-  if(!el) return;
-  const rtt = 20 + Math.floor(Math.random()*150); // ms
-  el.textContent = 'Ping: ' + rtt + ' ms';
-  return rtt;
-}
-
-function setConnectedState(server){
-  if(server){
-    connectedServer = server;
-    connDot.classList.add('connected');
-    connText.textContent = 'متصل — ' + server.name;
-    sideStatus.textContent = 'متصل';
-    sideServer.textContent = server.name;
-    sidePing.textContent = simulatePing(server.id) + ' ms';
-    sideSpeed.textContent = humanNumber(10 + Math.random()*400) + ' Mbps';
-    quickConnect.textContent = 'قطع الاتصال';
-    quickConnect.classList.remove('connect'); quickConnect.classList.add('disconnect');
-  } else {
-    connectedServer = null;
-    connDot.classList.remove('connected');
-    connText.textContent = 'غير متصل';
-    sideStatus.textContent = 'غير متصل';
-    sideServer.textContent = '—';
-    sidePing.textContent = '— ms';
-    sideSpeed.textContent = '— Mbps';
-    quickConnect.textContent = 'اتصال سريع';
-    quickConnect.classList.remove('disconnect'); quickConnect.classList.add('connect');
-  }
-}
-
-// محاكاة عملية الاتصال (تأخير + spinner)
-async function startConnect(id){
-  const server = servers.find(s=>s.id===id);
-  if(!server) return alert('خادم غير موجود');
-  // إذا متصل بسيرفر آخر — اَسأل المستخدم
-  if(connectedServer && connectedServer.id !== id){
-    if(!confirm('انت متصل بسيرفر آخر. هل تريد قطع الاتصال والاتصال بهذا السيرفر؟')) return;
-    disconnect(connectedServer.id);
-  }
-  // محاكاة: show spinner لمدة ثانيتين ثم "متصل"
-  setConnectedState(null);
-  connText.textContent = 'جاري الاتصال...';
-  connDot.classList.remove('connected');
-  // temporarily change button to loading
-  const btns = [...document.querySelectorAll(`button[data-id="${id}"]`)];
-  btns.forEach(b=>{ b.disabled=true; b.innerHTML = '<span class="spinner"></span>'});
-  await new Promise(r=>setTimeout(r, 1600 + Math.random()*1600));
-  btns.forEach(b=>{ b.disabled=false; b.innerHTML = b.classList.contains('disconnect')? 'قطع' : 'اتصال' });
-  // set connected
-  setConnectedState(server);
-  // update current IP: try fetch external IP; if fails, show fake IP
-  try{
-    const res = await fetch('https://api.ipify.org?format=json');
-    if(res.ok){
-      const j = await res.json();
-      currentIP.textContent = j.ip;
-    } else {
-      throw new Error('no ip');
-    }
-  }catch(e){
-    // fake IP based on region
-    const fake = generateFakeIP(server.region);
-    currentIP.textContent = fake;
-  }
-  // refresh pings for UX
-  simulatePing(id);
-}
-
-function disconnect(id){
-  if(!connectedServer || connectedServer.id !== id){
-    // if different id or none, just clear state
-    setConnectedState(null);
-    currentIP.textContent = '—';
-    return;
-  }
-  // simulate disconnect
-  connText.textContent = 'جاري قطع الاتصال...';
-  setTimeout(()=>{
-    setConnectedState(null);
-    currentIP.textContent = '—';
-  },900);
-}
-
-function filterRegion(r){
-  const q = document.getElementById('searchInput').value || '';
-  renderServers(q, r);
-}
-
-document.getElementById('searchInput').addEventListener('input', (e)=>{
-  renderServers(e.target.value, 'all');
-});
-
-quickConnect.addEventListener('click', ()=>{
-  if(connectedServer) disconnect(connectedServer.id);
-  else {
-    // connect to first server in list or selected
-    const first = servers[0];
-    if(first) startConnect(first.id);
-  }
-});
-
-function generateFakeIP(region){
-  // fake but plausible IP by region
-  if(region==='eu') return `93.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
-  if(region==='na') return `104.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
-  if(region==='asia') return `103.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
-  return `45.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
-}
-
-// init
-renderServers();
-setConnectedState(null);
-// try load real IP on start (best effort)
-(async ()=>{
-  try{
-    const res = await fetch('https://api.ipify.org?format=json');
-    if(res.ok){
-      const j = await res.json();
-      currentIP.textContent = j.ip;
-    } else currentIP.textContent = '—';
-  }catch(e){ currentIP.textContent = '—' }
-})();
-</script>
 </body>
 </html>
